@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Address Verification | Piestos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #3b82f6;
+      --primary-hover: #2563eb;
+      --success-color: #16a34a;
+      --danger-color: #dc2626;
+      --light-bg: #f8fafc;
+      --white-color: #ffffff;
+      --dark-text: #1e293b;
+      --light-text: #64748b;
+      --border-color: #cbd5e1;
+      --shadow-color: rgba(149, 157, 165, 0.15);
+      --input-bg: #f1f5f9;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--light-bg);
+      margin: 0;
+      padding: 20px;
+      color: var(--dark-text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .main-container {
+      max-width: 750px;
+      margin: 20px auto;
+    }
+
+    .form-card {
+      background-color: var(--white-color);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px var(--shadow-color);
+      margin-bottom: 30px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .form-header h2 {
+      margin: 0 0 10px 0;
+      font-weight: 700;
+      font-size: 2.25rem;
+      color: var(--dark-text);
+    }
+    
+    .form-header p {
+      margin: 0;
+      color: var(--light-text);
+      font-size: 1.1rem;
+    }
+
+    .section-title {
+      color: var(--primary-color);
+      font-weight: 600;
+      font-size: 1.25rem;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 15px;
+      margin-top: 20px;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-title:first-child {
+        margin-top: 0;
+    }
+    .section-title svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--dark-text);
+      font-size: 0.95rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      box-sizing: border-box;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+      background-color: var(--white-color);
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+    }
+
+    input[readonly],
+    textarea[readonly] {
+      background-color: var(--input-bg);
+      cursor: not-allowed;
+      color: var(--light-text);
+      border-color: #e5e7eb;
+    }
+    
+    .btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      color: #fff;
+      text-align: center;
+      cursor: pointer;
+      background-color: var(--primary-color);
+      border: none;
+      padding: 15px 24px;
+      font-size: 1rem;
+      border-radius: 10px;
+      text-decoration: none;
+      width: 100%;
+      box-sizing: border-box;
+      transition: background-color 0.2s, transform 0.2s, box-shadow 0.3s;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+    }
+    .btn:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 7px 20px rgba(59, 130, 246, 0.3);
+    }
+    
+    .btn-secondary {
+      background-color: #475569;
+      box-shadow: 0 4px 15px rgba(71, 85, 105, 0.2);
+    }
+    .btn-secondary:hover {
+        background-color: #334155;
+        box-shadow: 0 7px 20px rgba(71, 85, 105, 0.3);
+    }
+    .btn-danger {
+        background-color: var(--danger-color);
+        box-shadow: 0 4px 15px rgba(220, 38, 38, 0.2);
+    }
+    .btn-danger:hover {
+        background-color: #b91c1c;
+        box-shadow: 0 7px 20px rgba(220, 38, 38, 0.3);
+    }
+    .btn-success {
+        background-color: var(--success-color);
+        box-shadow: 0 4px 15px rgba(22, 163, 74, 0.2);
+    }
+    .btn-success:hover {
+        background-color: #15803d;
+        box-shadow: 0 7px 20px rgba(22, 163, 74, 0.3);
+    }
+
+    .preview-container {
+      margin-top: 15px;
+      background-color: var(--light-bg);
+      border: 2px dashed var(--border-color);
+      border-radius: 12px;
+      padding: 15px;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.3s;
+    }
+    .preview-container:has(.preview-img[src=""]) {
+        /* Styles when image is not present */
+    }
+    .preview-container:has(.preview-img:not([src=""])) {
+        padding: 10px;
+        border-style: solid;
+        background-color: white;
+    }
+
+    .preview-img {
+      max-width: 100%;
+      max-height: 250px;
+      border-radius: 8px;
+      display: none;
+      margin-bottom: 15px;
+    }
+    
+    .delete-btn {
+      width: auto;
+      padding: 8px 18px;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .gps-input-group {
+      display: flex;
+      gap: 10px;
+    }
+    .gps-input-group input {
+      flex-grow: 1;
+    }
+    .gps-input-group .btn {
+      width: auto;
+      flex-shrink: 0;
+      padding: 14px 20px;
+    }
+
+    #loader {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 10000;
+    }
+    .spinner {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 60px; height: 60px;
+      margin: -30px 0 0 -30px;
+      border: 6px solid var(--border-color);
+      border-top-color: var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    #success-container {
+      display: none;
+      text-align: center;
+      padding: 40px;
+    }
+    .success-animation {
+      width: 100px; height: 100px;
+      margin: 0 auto 30px auto;
+    }
+    .success-animation .checkmark-circle {
+      stroke-dasharray: 166; stroke-dashoffset: 166;
+      stroke-width: 3; stroke-miterlimit: 10;
+      stroke: var(--success-color); fill: none;
+      animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+    }
+    .success-animation .checkmark {
+      width: 100px; height: 100px;
+      border-radius: 50%; display: block;
+      stroke-width: 3; stroke: #fff; stroke-miterlimit: 10;
+      margin: 10% auto;
+      box-shadow: inset 0px 0px 0px var(--success-color);
+      animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+    }
+    .success-animation .checkmark-check {
+      transform-origin: 50% 50%;
+      stroke-dasharray: 48; stroke-dashoffset: 48;
+      animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+    }
+    @keyframes stroke { 100% { stroke-dashoffset: 0; } }
+    @keyframes scale { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }
+    @keyframes fill { 100% { box-shadow: inset 0px 0px 0px 50px var(--success-color); } }
+
+    #success-container h2 {
+      border-bottom: none;
+      color: var(--dark-text);
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    #success-container p {
+        font-size: 1.1rem; color: var(--light-text);
+    }
+    
+    #camera-modal {
+      display: none;
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(5px);
+      z-index: 1001;
+      color: white;
+    }
+    #camera-container {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 15px;
+      box-sizing: border-box;
+    }
+    #camera-view, #captured-image {
+      width: 100%;
+      max-width: 640px;
+      height: auto;
+      border-radius: 16px;
+      background: #111;
+      border: 1px solid #444;
+    }
+    #captured-image {
+      max-height: 70vh;
+      display: none;
+    }
+    #camera-controls {
+      margin-top: 25px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+    }
+    #camera-controls .btn {
+      width: auto;
+      min-width: 120px;
+    }
+
+    .home-pics-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .home-pic-item {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .home-pic-preview {
+      max-width: 100%;
+      max-height: 150px;
+      border-radius: 8px;
+      display: none;
+    }
+    .add-home-pic-btn {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+      .main-container {
+        margin: 10px auto;
+      }
+      .form-card {
+        padding: 20px;
+        border-radius: 16px;
+      }
+      .form-header h2 {
+        font-size: 1.8rem;
+      }
+      .form-header p {
+        font-size: 1rem;
+      }
+      .section-title {
+        font-size: 1.1rem;
+      }
+      .gps-input-group {
+        flex-direction: column;
+      }
+      .gps-input-group .btn {
+        width: 100%;
+      }
+      .home-pics-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="loader">
+    <div class="spinner"></div>
+  </div>
+
+  <div id="camera-modal">
+    <div id="camera-container">
+      <video id="camera-view" autoplay playsinline></video>
+      <canvas id="canvas" style="display:none;"></canvas>
+      <img id="captured-image" alt="Captured Image Preview">
+      <div id="camera-controls">
+        <button id="capture-btn" class="btn">Capture</button>
+        <button id="retake-btn" class="btn btn-secondary" style="display:none;">Retake</button>
+        <button id="use-photo-btn" class="btn btn-success" style="display:none;">Use Photo</button>
+        <button id="close-camera-btn" class="btn btn-danger">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div id="form-container">
+      <div class="form-header">
+          <h2>Address Verification</h2>
+          <p>Please fill and verify the details below.</p>
+      </div>
+
+      <form id="verificationForm" onsubmit="handleFormSubmit(event)">
+        <div class="form-card">
+          <h3 class="section-title">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+            Candidate Details
+          </h3>
+          <div class="form-group">
+            <label>Reference ID</label>
+            <input type="text" readonly value="<?= record['Reference ID'] ?>">
+          </div>
+          <div class="form-group">
+            <label>Candidate Name</label>
+            <input type="text" readonly value="<?= record['Candidate Name'] ?>">
+          </div>
+          <div class="form-group">
+            <label>Mobile Number</label>
+            <input type="tel" readonly value="<?= record['Mobile Number'] ?>">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" readonly value="<?= record['Email'] ?>">
+          </div>
+          <div class="form-group">
+            <label>Address on Record</label>
+            <textarea readonly rows="3"><?= record['Address'] ?></textarea>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h3 class="section-title">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>
+            Verification Details
+          </h3>
+          <div class="form-group">
+            <label for="address">Verified Address *</label>
+            <textarea id="address" rows="3" required placeholder="Enter the full, verified address"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="addressType">Address Type *</label>
+            <select id="addressType" required>
+              <option value="" disabled selected>-- Select an Address Type --</option>
+              <option value="Owned">Owned</option>
+              <option value="Rented">Rented</option>
+              <option value="Parental">Parental</option>
+              <option value="Company Provided">Company Provided</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="periodOfStay">Period of Stay *</label>
+            <input type="text" id="periodOfStay" required placeholder="e.g., 3 years, 5 months">
+          </div>
+          <div class="form-group">
+            <label for="dateOfBirth">Date of Birth *</label>
+            <input type="date" id="dateOfBirth" required>
+          </div>
+          <div class="form-group">
+            <label for="fatherName">Father's Name *</label>
+            <input type="text" id="fatherName" required placeholder="Enter father's full name">
+          </div>
+          <div class="form-group">
+            <label for="comments">Comments</label>
+            <textarea id="comments" rows="3" placeholder="Any additional comments or notes?"></textarea>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h3 class="section-title">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.916 17.916 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-.778.099-1.533.284-2.253" /></svg>
+            Geolocation &amp; Proofs
+          </h3>
+          <div class="form-group">
+            <label for="gps">Geolocation *</label>
+            <div class="gps-input-group">
+                <input type="text" id="gps" readonly placeholder="Click 'Get' to fetch coordinates..." required>
+                <button type="button" class="btn" onclick="getGPSLocation()" style="width: auto;">Get Location</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Live Selfie *</label>
+            <button type="button" class="btn btn-secondary" onclick="openCamera('selfie')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.776 48.776 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z" /></svg>
+                Capture Selfie
+            </button>
+            <div class="preview-container">
+              <img id="selfiePreview" class="preview-img" alt="Selfie Preview"/>
+              <button type="button" class="btn btn-danger delete-btn" onclick="deleteImage('selfiePreview', 'selfieData')">Delete</button>
+              <input type="hidden" id="selfieData" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>ID Card Photo *</label>
+            <button type="button" class="btn btn-secondary" onclick="openCamera('idCard')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15A2.25 2.25 0 0 0 2.25 6.75v10.5A2.25 2.25 0 0 0 4.5 19.5Z" /></svg>
+                Capture ID Card
+            </button>
+            <div class="preview-container">
+              <img id="idCardPreview" class="preview-img" alt="ID Card Preview"/>
+              <button type="button" class="btn btn-danger delete-btn" onclick="deleteImage('idCardPreview', 'idCardData')">Delete</button>
+              <input type="hidden" id="idCardData" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>House/Building Photos *</label>
+            <div class="home-pics-container" id="homePicsContainer">
+              <!-- Home pics will be added here dynamically -->
+            </div>
+            <button type="button" class="btn btn-secondary add-home-pic-btn" onclick="openCamera('homePic')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
+                Add House Photo
+            </button>
+            <input type="hidden" id="homePicData1">
+            <input type="hidden" id="homePicData2">
+            <input type="hidden" id="homePicData3">
+            <input type="hidden" id="homePicData4">
+            <input type="hidden" id="homePicData5">
+          </div>
+        </div>
+        
+        <div class="form-card">
+          <h3 class="section-title">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>
+            Signature
+          </h3>
+          <div class="form-group">
+            <label>Please capture a clear signature image *</label>
+            <button type="button" class="btn btn-secondary" onclick="openCamera('signature')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8a.75.75 0 0 1-.935-.935l.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" /></svg>
+                Capture Signature
+            </button>
+            <div class="preview-container signature-container">
+              <img id="signaturePreview" class="preview-img" alt="Signature Preview"/>
+              <button type="button" class="btn btn-danger delete-btn" onclick="deleteImage('signaturePreview', 'signatureData')">Delete</button>
+              <input type="hidden" id="signatureData" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn">
+            Submit Verification
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="20" height="20">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+    
+    <div id="success-container" class="form-card">
+        <div class="success-animation">
+            <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+        </div>
+        <h2>Success!</h2>
+        <p>Your verification details have been submitted.</p>
+    </div>
+  </div>
+
+  <script>
+    // Make the original record data from the server available to the client script
+    const clientRecord = <?!= JSON.stringify(record) ?>;
+    const loader = document.getElementById('loader');
+    let currentCaptureType = '';
+    let stream = null;
+    let currentGPS = '';
+    let currentDate = new Date().toLocaleString();
+    let homePicCount = 0;
+
+    // Debug: Log the record data received from server
+    console.log("Client Record Data:", clientRecord);
+
+    // --- Camera Functionality ---
+    function openCamera(type) {
+      currentCaptureType = type;
+      const modal = document.getElementById('camera-modal');
+      const video = document.getElementById('camera-view');
+      const captureBtn = document.getElementById('capture-btn');
+      const retakeBtn = document.getElementById('retake-btn');
+      const usePhotoBtn = document.getElementById('use-photo-btn');
+      const capturedImage = document.getElementById('captured-image');
+      
+      // Reset camera UI
+      capturedImage.style.display = 'none';
+      video.style.display = 'block';
+      captureBtn.style.display = 'inline-flex';
+      retakeBtn.style.display = 'none';
+      usePhotoBtn.style.display = 'none';
+      
+      // Open modal
+      modal.style.display = 'block';
+      
+      // Start camera
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        const constraints = {
+          video: {
+            facingMode: type === 'selfie' ? 'user' : 'environment',
+            width: { ideal: 1920 },
+            height: { ideal: 1080 }
+          },
+          audio: false
+        };
+        
+        navigator.mediaDevices.getUserMedia(constraints)
+          .then(function(mediaStream) {
+            stream = mediaStream;
+            video.srcObject = mediaStream;
+          })
+          .catch(function(error) {
+            console.error("Camera error: ", error);
+            alert("Could not access the camera: " + error.message);
+            closeCamera();
+          });
+      } else {
+        alert("Camera access is not supported by your browser.");
+      }
+    }
+
+    function closeCamera() {
+      const modal = document.getElementById('camera-modal');
+      
+      // Stop camera stream
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+      }
+      
+      // Hide modal
+      modal.style.display = 'none';
+    }
+
+    document.getElementById('close-camera-btn').addEventListener('click', closeCamera);
+
+    document.getElementById('capture-btn').addEventListener('click', function() {
+      const video = document.getElementById('camera-view');
+      const canvas = document.getElementById('canvas');
+      const capturedImage = document.getElementById('captured-image');
+      const captureBtn = document.getElementById('capture-btn');
+      const retakeBtn = document.getElementById('retake-btn');
+      const usePhotoBtn = document.getElementById('use-photo-btn');
+      
+      // Set canvas size to match video
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      
+      // Draw video frame to canvas
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      
+      // Add overlay text ONLY IF it's not a signature capture
+      if (currentCaptureType !== 'signature') {
+          const fontSize1 = Math.max(24, canvas.width * 0.025);
+          const fontSize2 = Math.max(18, canvas.width * 0.018);
+          
+          // Add top text (Company Name)
+          ctx.font = `bold ${fontSize1}px Inter`;
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+          ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
+          ctx.lineWidth = 4;
+          const topText = 'Piestos Solutions Pvt Ltd';
+          const topTextMetrics = ctx.measureText(topText);
+          ctx.strokeText(topText, (canvas.width - topTextMetrics.width) / 2, fontSize1 + 20);
+          ctx.fillText(topText, (canvas.width - topTextMetrics.width) / 2, fontSize1 + 20);
+
+          // Prepare bottom text (Address, GPS, Date)
+          const address = clientRecord['Address'] || 'N/A';
+          const gps = currentGPS || 'GPS Not Available';
+          const date = new Date().toLocaleString();
+          const bottomText = `${address} | ${gps} | ${date}`;
+
+          // Draw semi-transparent background for bottom text
+          const padding = 20;
+          const lineHeight = fontSize2 * 1.4;
+          ctx.font = `500 ${fontSize2}px Inter`;
+          
+          // Simple text wrapping
+          const lines = [];
+          let currentLine = '';
+          const words = bottomText.split(' ');
+          for(const word of words){
+              const testLine = currentLine + word + ' ';
+              const metrics = ctx.measureText(testLine);
+              if(metrics.width > canvas.width - (padding * 2)){
+                  lines.push(currentLine.trim());
+                  currentLine = word + ' ';
+              } else {
+                  currentLine = testLine;
+              }
+          }
+          lines.push(currentLine.trim());
+
+          const bgHeight = (lines.length * lineHeight) + (padding * 1.5);
+          const bgY = canvas.height - bgHeight;
+
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+          ctx.fillRect(0, bgY, canvas.width, bgHeight);
+
+          // Draw bottom text lines
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+          lines.forEach((line, index) => {
+              ctx.fillText(line, padding, bgY + padding + (index * lineHeight));
+          });
+      }
+      
+      // Convert to image and display
+      capturedImage.src = canvas.toDataURL('image/jpeg', 0.85);
+      capturedImage.style.display = 'block';
+      video.style.display = 'none';
+      captureBtn.style.display = 'none';
+      retakeBtn.style.display = 'inline-flex';
+      usePhotoBtn.style.display = 'inline-flex';
+    });
+
+    document.getElementById('retake-btn').addEventListener('click', function() {
+      const video = document.getElementById('camera-view');
+      const capturedImage = document.getElementById('captured-image');
+      const captureBtn = document.getElementById('capture-btn');
+      const retakeBtn = document.getElementById('retake-btn');
+      const usePhotoBtn = document.getElementById('use-photo-btn');
+      
+      capturedImage.style.display = 'none';
+      video.style.display = 'block';
+      captureBtn.style.display = 'inline-flex';
+      retakeBtn.style.display = 'none';
+      usePhotoBtn.style.display = 'none';
+    });
+
+    document.getElementById('use-photo-btn').addEventListener('click', function() {
+      const capturedImage = document.getElementById('captured-image');
+      
+      if (currentCaptureType === 'homePic') {
+        // Handle home photos (can have multiple)
+        if (homePicCount >= 5) {
+          alert("Maximum of 5 home photos allowed.");
+          closeCamera();
+          return;
+        }
+        
+        homePicCount++;
+        const homePicsContainer = document.getElementById('homePicsContainer');
+        const homePicId = `homePicPreview${homePicCount}`;
+        const homePicDataId = `homePicData${homePicCount}`;
+        
+        // Create new home pic element
+        const homePicItem = document.createElement('div');
+        homePicItem.className = 'home-pic-item';
+        homePicItem.innerHTML = `
+          <img id="${homePicId}" class="home-pic-preview" alt="Home Photo Preview ${homePicCount}"/>
+          <button type="button" class="btn btn-danger delete-btn" onclick="deleteHomePic('${homePicId}', '${homePicDataId}', ${homePicCount})">Delete</button>
+        `;
+        homePicsContainer.appendChild(homePicItem);
+        
+        // Set the preview image
+        const previewElement = document.getElementById(homePicId);
+        previewElement.src = capturedImage.src;
+        previewElement.style.display = 'block';
+        
+        // Show delete button
+        previewElement.nextElementSibling.style.display = 'inline-flex';
+        
+        // Store base64 data in hidden input
+        document.getElementById(homePicDataId).value = capturedImage.src;
+        
+      } else {
+        // Handle single photos (selfie, idCard, signature)
+        const previewId = currentCaptureType + 'Preview';
+        const dataInputId = currentCaptureType + 'Data';
+        const previewElement = document.getElementById(previewId);
+        const deleteBtn = previewElement.nextElementSibling;
+        
+        // Set the preview image
+        previewElement.src = capturedImage.src;
+        previewElement.style.display = 'block';
+        
+        // Show delete button
+        deleteBtn.style.display = 'inline-flex';
+        
+        // Store base64 data in hidden input
+        document.getElementById(dataInputId).value = capturedImage.src;
+      }
+      
+      // Close camera
+      closeCamera();
+    });
+
+    function deleteImage(previewId, dataInputId) {
+      const imgElement = document.getElementById(previewId);
+      const deleteBtn = imgElement.nextElementSibling;
+      
+      imgElement.src = '';
+      imgElement.style.display = 'none';
+      deleteBtn.style.display = 'none';
+      document.getElementById(dataInputId).value = '';
+    }
+    
+    function deleteHomePic(previewId, dataInputId, index) {
+      const imgElement = document.getElementById(previewId);
+      const container = imgElement.parentElement;
+      
+      // Remove the home pic item from DOM
+      container.parentElement.removeChild(container);
+      
+      // Clear the data input
+      document.getElementById(dataInputId).value = '';
+      
+      // Decrement count
+      homePicCount--;
+      
+      // Reindex remaining home pics if needed
+      // (This is a simplified approach - in a real app you might want to reorder the remaining items)
+    }
+
+    // --- Geolocation Logic ---
+    function getGPSLocation() {
+      const gpsInput = document.getElementById('gps');
+      const getBtn = gpsInput.nextElementSibling;
+      if (navigator.geolocation) {
+        gpsInput.value = "Getting location...";
+        getBtn.disabled = true;
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude.toFixed(6);
+            const lon = position.coords.longitude.toFixed(6);
+            currentGPS = `${lat}, ${lon}`;
+            gpsInput.value = currentGPS;
+            currentDate = new Date().toLocaleString();
+            getBtn.disabled = false;
+          },
+          (error) => {
+            gpsInput.value = "Error: Unable to retrieve location.";
+            alert("Error: " + error.message);
+            getBtn.disabled = false;
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+      } else {
+        alert("Geolocation is not supported by this browser.");
+      }
+    }
+
+    // --- Main Form Submission Logic ---
+    async function handleFormSubmit(event) {
+      event.preventDefault();
+      
+      // Debug: Log the reference ID being submitted
+      console.log("Submitting for Reference ID:", clientRecord['Reference ID']);
+      
+      loader.style.display = 'block';
+
+      try {
+        // 1. Collect all form data
+        const formData = {
+          form: {
+            address: document.getElementById('address').value,
+            addressType: document.getElementById('addressType').value,
+            periodOfStay: document.getElementById('periodOfStay').value,
+            dateOfBirth: document.getElementById('dateOfBirth').value,
+            fatherName: document.getElementById('fatherName').value,
+            comments: document.getElementById('comments').value
+          },
+          gps: document.getElementById('gps').value,
+          selfieLink: document.getElementById('selfieData').value,
+          idCardLink: document.getElementById('idCardData').value,
+          homePicLinks: [
+            document.getElementById('homePicData1').value,
+            document.getElementById('homePicData2').value,
+            document.getElementById('homePicData3').value,
+            document.getElementById('homePicData4').value,
+            document.getElementById('homePicData5').value
+          ].filter(link => link), // Filter out empty values
+          signatureLink: document.getElementById('signatureData').value
+        };
+
+        // 2. Create an array of file upload tasks
+        const uploadTasks = [
+          { key: 'selfieLink', base64: formData.selfieLink, filename: `${clientRecord['Reference ID']}_selfie.jpg` },
+          { key: 'idCardLink', base64: formData.idCardLink, filename: `${clientRecord['Reference ID']}_idcard.jpg` },
+          ...formData.homePicLinks.map((base64, index) => ({
+            key: `homePicLink${index + 1}`,
+            base64,
+            filename: `${clientRecord['Reference ID']}_home${index + 1}.jpg`
+          })),
+          { key: 'signatureLink', base64: formData.signatureLink, filename: `${clientRecord['Reference ID']}_signature.jpg` }
+        ].filter(task => task.base64); // Only include tasks with base64 data
+
+        // Function to process a single upload
+        const processUpload = (task) => {
+            return new Promise((resolve, reject) => {
+                google.script.run
+                    .withSuccessHandler(response => {
+                        if (response.status === 'success') {
+                            // Update the form data with the URL
+                            if (task.key.startsWith('homePicLink')) {
+                                const index = parseInt(task.key.replace('homePicLink', '')) - 1;
+                                formData.homePicLinks[index] = response.fileUrl;
+                            } else {
+                                formData[task.key] = response.fileUrl;
+                            }
+                            resolve();
+                        } else {
+                            reject(new Error(response.message || 'File upload failed.'));
+                        }
+                    })
+                    .withFailureHandler(error => reject(error))
+                    .uploadFile(task.base64.split(',')[1], task.filename, 'image/jpeg', clientRecord['Reference ID']);
+            });
+        };
+
+        // Wait for all uploads to complete
+        await Promise.all(uploadTasks.map(processUpload));
+        
+        // 3. Submit the final form data (with URLs) to update the spreadsheet
+        await new Promise((resolve, reject) => {
+            google.script.run
+                .withSuccessHandler(response => {
+                    if (response.status === 'success') {
+                        document.getElementById('form-container').style.display = 'none';
+                        document.getElementById('success-container').style.display = 'block';
+                        window.scrollTo(0, 0);
+                        resolve();
+                    } else {
+                        reject(new Error(response.message || 'Failed to save data.'));
+                    }
+                })
+                .withFailureHandler(error => reject(error))
+                .submitVerificationForm(clientRecord, formData);
+        });
+
+      } catch (error) {
+        alert('An error occurred during submission: ' + error.message);
+        console.error("Submission error:", error);
+      } finally {
+        loader.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>
